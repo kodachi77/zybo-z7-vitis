@@ -5,6 +5,8 @@ set root_path [file normalize [file dirname [info script]]/..]
 
 source [file join ${root_path} project_info.tcl]
 
+set_param board.repoPaths "$::env(HOME)/.Xilinx/Vivado/2022.1/xhub/board_store/xilinx_board_store"
+
 # open block design
 open_project ${overlay_name}.xpr
 open_bd_design ${overlay_name}.srcs/sources_1/bd/${design_name}/${design_name}.bd

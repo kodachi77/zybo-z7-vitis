@@ -224,8 +224,7 @@ CONFIG_SUBSYSTEM_INITRAMFS_IMAGE_NAME="petalinux-image-minimal"
 CONFIG_SUBSYSTEM_UIMAGE_NAME="image.ub"
 CONFIG_SUBSYSTEM_RFS_FORMATS="cpio cpio.gz cpio.gz.u-boot ext4 tar.gz jffs2"
 CONFIG_SUBSYSTEM_DTB_PADDING_SIZE=0x1000
-CONFIG_SUBSYSTEM_COPY_TO_TFTPBOOT=y
-CONFIG_SUBSYSTEM_TFTPBOOT_DIR="/tftpboot"
+# CONFIG_SUBSYSTEM_COPY_TO_TFTPBOOT is not set
 
 #
 # Firmware Version Configuration
@@ -252,8 +251,8 @@ CONFIG_DEVTOOL_WORKSPACE_LOCATION="${PROOT}/components/yocto/workspace"
 #
 # Parallel thread execution
 #
-CONFIG_YOCTO_BB_NUMBER_THREADS=""
-CONFIG_YOCTO_PARALLEL_MAKE=""
+CONFIG_YOCTO_BB_NUMBER_THREADS="4"
+CONFIG_YOCTO_PARALLEL_MAKE="4"
 
 #
 # Add pre-mirror url 
@@ -277,4 +276,5 @@ CONFIG_YOCTO_NETWORK_SSTATE_FEEDS_URL="http://petalinux.xilinx.com/sswreleases/r
 # User Layers
 #
 CONFIG_USER_LAYER_0=""
+
 CONFIG_SUBSYSTEM_BOOTARGS_GENERATED="console=ttyPS0,115200 earlycon root=/dev/ram0 rw"

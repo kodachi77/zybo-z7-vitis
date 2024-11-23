@@ -100,7 +100,7 @@ CONFIG_system-zynq=y
 #
 # dnf
 #
-# CONFIG_dnf is not set
+CONFIG_dnf=y
 
 #
 # e2fsprogs 
@@ -476,7 +476,7 @@ CONFIG_can-utils=y
 #
 # dropbear 
 #
-# CONFIG_dropbear is not set
+# CONFIG_dropbear=y
 # CONFIG_dropbear-dev is not set
 # CONFIG_dropbear-dbg is not set
 
@@ -520,7 +520,7 @@ CONFIG_nfs-utils=y
 #
 # openssh 
 #
-# CONFIG_openssh is not set
+CONFIG_openssh=y
 # CONFIG_openssh-misc is not set
 # CONFIG_openssh-dbg is not set
 # CONFIG_openssh-sshd is not set
@@ -528,7 +528,7 @@ CONFIG_nfs-utils=y
 # CONFIG_openssh-ssh is not set
 # CONFIG_openssh-dev is not set
 # CONFIG_openssh-sftp is not set
-CONFIG_openssh-sftp-server=y
+# CONFIG_openssh-sftp-server is not set
 # CONFIG_openssh-scp is not set
 
 #
@@ -2032,21 +2032,21 @@ CONFIG_ncurses=y
 #
 # xrt
 #
-# CONFIG_xrt is not set
-# CONFIG_xrt-dev is not set
+CONFIG_xrt=y
+CONFIG_xrt-dev=y
 # CONFIG_xrt-dbg is not set
 
 #
 # zocl
 #
-# CONFIG_zocl is not set
+CONFIG_zocl=y
 # CONFIG_zocl-dev is not set
 # CONFIG_zocl-dbg is not set
 
 #
 # opencl-clhpp
 #
-# CONFIG_opencl-clhpp-dev is not set
+CONFIG_opencl-clhpp-dev=y
 
 #
 # opencl-headers
@@ -2513,7 +2513,7 @@ CONFIG_packagegroup-core-buildessential=y
 #
 # packagegroup-core-ssh-dropbear 
 #
-CONFIG_packagegroup-core-ssh-dropbear=y
+# CONFIG_packagegroup-core-ssh-dropbear=y
 # CONFIG_packagegroup-core-ssh-dropbear-dbg is not set
 # CONFIG_packagegroup-core-ssh-dropbear-dev is not set
 
@@ -3815,7 +3815,7 @@ CONFIG_u-boot-tools=y
 #
 # packagegroup-petalinux-opencv 
 #
-# CONFIG_packagegroup-petalinux-opencv is not set
+CONFIG_packagegroup-petalinux-opencv=y
 # CONFIG_packagegroup-petalinux-opencv-dbg is not set
 # CONFIG_packagegroup-petalinux-opencv-dev is not set
 
@@ -3872,20 +3872,21 @@ CONFIG_u-boot-tools=y
 #
 # Image Features
 #
-CONFIG_imagefeature-ssh-server-dropbear=y
-# CONFIG_imagefeature-ssh-server-openssh is not set
+# CONFIG_imagefeature-ssh-server-dropbear is not set
+CONFIG_imagefeature-ssh-server-openssh=y
 CONFIG_imagefeature-hwcodecs=y
 # CONFIG_imagefeature-package-management is not set
 CONFIG_imagefeature-debug-tweaks=y
-# CONFIG_auto-login is not set
+CONFIG_auto-login=y
 # CONFIG_Init-manager-systemd is not set
 CONFIG_Init-manager-sysvinit=y
 
 #
 # user packages 
 #
-# CONFIG_gpio-demo is not set
-# CONFIG_peekpoke is not set
+CONFIG_gpio-demo=y
+CONFIG_opencl-headers-dev=y
+CONFIG_peekpoke=y
 
 #
 # PetaLinux RootFS Settings
