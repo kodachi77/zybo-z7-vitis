@@ -78,6 +78,9 @@ set_property "corecontainer.enable" "0" $obj
 set_property "ip_cache_permissions" "read write" $obj
 set_property "ip_output_repo" "[file normalize "$repo_path/proj/cache"]" $obj
 
+set_property platform.extensible true [current_project]
+# set_property platform.uses_pr 0 [current_project]
+
 # Create 'sources_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sources_1] ""]} {
     puts "INFO: Creating sources_1 fileset"
