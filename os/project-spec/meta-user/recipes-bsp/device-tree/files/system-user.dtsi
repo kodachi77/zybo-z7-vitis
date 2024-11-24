@@ -1,11 +1,11 @@
 /include/ "system-conf.dtsi"
 / {
-	amba {
+	/*amba {
 		zyxclmm_drm {
 			compatible = "xlnx,zocl";
 			status = "okay";
 		};
 
-	};
+	};*/
 };
 

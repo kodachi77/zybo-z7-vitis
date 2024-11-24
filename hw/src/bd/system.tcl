@@ -124,11 +124,10 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
-xilinx.com:ip:axi_gpio:2.0\
+xilinx.com:ip:axi_intc:4.1\
 xilinx.com:ip:clk_wiz:6.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:processing_system7:5.5\
-xilinx.com:ip:xlconcat:2.1\
 "
 
    set list_ips_missing ""
@@ -229,19 +228,14 @@ proc create_root_design { parentCell } {
    ] $FIXED_IO
   set_property HDL_ATTRIBUTE.LOCKED {TRUE} [get_bd_intf_ports FIXED_IO]
 
-  set btns_4bits [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 btns_4bits ]
-
 
   # Create ports
 
-  # Create instance: axi_gpio_0, and set properties
-  set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
+  # Create instance: axi_intc_0, and set properties
+  set axi_intc_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_intc:4.1 axi_intc_0 ]
   set_property -dict [ list \
-   CONFIG.C_ALL_INPUTS {1} \
-   CONFIG.C_GPIO_WIDTH {4} \
-   CONFIG.GPIO_BOARD_INTERFACE {btns_4bits} \
-   CONFIG.USE_BOARD_FLOW {true} \
- ] $axi_gpio_0
+   CONFIG.C_IRQ_CONNECTION {1} \
+ ] $axi_intc_0
 
   # Create instance: axi_interconnect_0, and set properties
   set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
@@ -255,16 +249,16 @@ proc create_root_design { parentCell } {
    CONFIG.CLKIN1_JITTER_PS {200.0} \
    CONFIG.CLKIN2_JITTER_PS {100.0} \
    CONFIG.CLKOUT1_DRIVES {BUFG} \
-   CONFIG.CLKOUT1_JITTER {139.128} \
-   CONFIG.CLKOUT1_PHASE_ERROR {154.678} \
+   CONFIG.CLKOUT1_JITTER {214.854} \
+   CONFIG.CLKOUT1_PHASE_ERROR {155.997} \
    CONFIG.CLKOUT2_DRIVES {BUFG} \
-   CONFIG.CLKOUT2_JITTER {124.134} \
-   CONFIG.CLKOUT2_PHASE_ERROR {154.678} \
+   CONFIG.CLKOUT2_JITTER {185.991} \
+   CONFIG.CLKOUT2_PHASE_ERROR {155.997} \
    CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {200.000} \
    CONFIG.CLKOUT2_USED {true} \
    CONFIG.CLKOUT3_DRIVES {BUFG} \
-   CONFIG.CLKOUT3_JITTER {116.497} \
-   CONFIG.CLKOUT3_PHASE_ERROR {154.678} \
+   CONFIG.CLKOUT3_JITTER {173.176} \
+   CONFIG.CLKOUT3_PHASE_ERROR {155.997} \
    CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {300.00} \
    CONFIG.CLKOUT3_USED {true} \
    CONFIG.CLKOUT4_DRIVES {BUFG} \
@@ -272,6 +266,7 @@ proc create_root_design { parentCell } {
    CONFIG.CLKOUT6_DRIVES {BUFG} \
    CONFIG.CLKOUT7_DRIVES {BUFG} \
    CONFIG.CLK_IN1_BOARD_INTERFACE {Custom} \
+   CONFIG.FEEDBACK_SOURCE {FDBK_AUTO} \
    CONFIG.MMCM_BANDWIDTH {OPTIMIZED} \
    CONFIG.MMCM_CLKFBOUT_MULT_F {24} \
    CONFIG.MMCM_CLKIN1_PERIOD {20.000} \
@@ -279,12 +274,12 @@ proc create_root_design { parentCell } {
    CONFIG.MMCM_CLKOUT0_DIVIDE_F {12} \
    CONFIG.MMCM_CLKOUT1_DIVIDE {6} \
    CONFIG.MMCM_CLKOUT2_DIVIDE {4} \
-   CONFIG.MMCM_COMPENSATION {INTERNAL} \
+   CONFIG.MMCM_COMPENSATION {ZHOLD} \
    CONFIG.MMCM_DIVCLK_DIVIDE {1} \
    CONFIG.NUM_OUT_CLKS {3} \
-   CONFIG.OVERRIDE_MMCM {true} \
+   CONFIG.OVERRIDE_MMCM {false} \
    CONFIG.PLL_CLKIN_PERIOD {20.000} \
-   CONFIG.PRIMITIVE {PLL} \
+   CONFIG.PRIMITIVE {MMCM} \
    CONFIG.PRIM_IN_FREQ {50} \
    CONFIG.RESET_PORT {resetn} \
    CONFIG.RESET_TYPE {ACTIVE_LOW} \
@@ -1107,31 +1102,26 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
    CONFIG.PCW_WDT_PERIPHERAL_FREQMHZ {133.333333} \
  ] $processing_system7_0
 
-  # Create instance: xlconcat_0, and set properties
-  set xlconcat_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconcat:2.1 xlconcat_0 ]
-  set_property -dict [ list \
-   CONFIG.NUM_PORTS {1} \
- ] $xlconcat_0
+  set_property SELECTED_SIM_MODEL tlm  $processing_system7_0
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports btns_4bits] [get_bd_intf_pins axi_gpio_0/GPIO]
-  connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
+  connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_intc_0/s_axi] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins processing_system7_0/M_AXI_GP0]
 
   # Create port connections
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK]
+  connect_bd_net -net axi_intc_0_irq [get_bd_pins axi_intc_0/irq] [get_bd_pins processing_system7_0/IRQ_F2P]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_intc_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK]
   connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins proc_sys_reset_1/slowest_sync_clk]
   connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_pins clk_wiz_0/clk_out3] [get_bd_pins proc_sys_reset_2/slowest_sync_clk]
   connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_0/dcm_locked] [get_bd_pins proc_sys_reset_1/dcm_locked] [get_bd_pins proc_sys_reset_2/dcm_locked]
-  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins axi_gpio_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
+  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins axi_intc_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
   connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins processing_system7_0/FCLK_CLK0]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins proc_sys_reset_1/ext_reset_in] [get_bd_pins proc_sys_reset_2/ext_reset_in] [get_bd_pins processing_system7_0/FCLK_RESET0_N]
-  connect_bd_net -net xlconcat_0_dout [get_bd_pins processing_system7_0/IRQ_F2P] [get_bd_pins xlconcat_0/dout]
 
   # Create address segments
-  assign_bd_address -offset 0x41200000 -range 0x00010000 -target_address_space [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_gpio_0/S_AXI/Reg] -force
+  assign_bd_address -offset 0x41800000 -range 0x00010000 -target_address_space [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_intc_0/S_AXI/Reg] -force
 
 
   # Restore current instance
@@ -1139,12 +1129,12 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
 
   # Create PFM attributes
   set_property PFM_NAME {Digilent:zybo-z7-20:zybo_z7_20_base_202201:1.0} [get_files [current_bd_design].bd]
+  set_property PFM.IRQ {intr { id 0 range 32 }} [get_bd_cells /axi_intc_0]
+  set_property PFM.AXI_PORT {M01_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M02_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M03_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M04_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M05_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M06_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M07_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M08_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M09_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M10_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M11_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M12_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M13_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M14_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M15_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M16_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M17_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M18_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M19_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M20_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M21_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M22_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M23_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M24_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M25_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M26_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M27_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M28_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M29_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M30_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M31_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"}} [get_bd_cells /axi_interconnect_0]
   set_property PFM.CLOCK {clk_out1 {id "0" is_default "true" proc_sys_reset "/proc_sys_reset_0" status "fixed" freq_hz "100000000"} clk_out2 {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_1" status "fixed" freq_hz "200000000"} clk_out3 {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_2" status "fixed" freq_hz "300000000"}} [get_bd_cells /clk_wiz_0]
-  set_property PFM.AXI_PORT {M_AXI_GP1 { memport "M_AXI_GP" sptag "" memory "" is_range "false" } S_AXI_HP0 { memport "S_AXI_HP" sptag "HP0" memory "" is_range "false" } S_AXI_HP1 { memport "S_AXI_HP" sptag "HP1" memory "" is_range "false" } S_AXI_HP2 { memport "S_AXI_HP" sptag "HP2" memory "" is_range "false" } S_AXI_HP3 { memport "S_AXI_HP" sptag "" memory "" is_range "false" } } [get_bd_cells /processing_system7_0]
-  set_property PFM.IRQ {In0 {is_range "true"} In1 {is_range "true"} In2 {is_range "true"} In3 {is_range "true"} In4 {is_range "true"} In5 {is_range "true"} In6 {is_range "true"} In7 {is_range "true"}} [get_bd_cells /xlconcat_0]
+  set_property PFM.AXI_PORT {M_AXI_GP1 {memport "M_AXI_GP" sptag "" memory "" is_range "false"} S_AXI_HP0 {memport "S_AXI_HP" sptag "HP0" memory "" is_range "false"} S_AXI_HP1 {memport "S_AXI_HP" sptag "HP1" memory "" is_range "false"} S_AXI_HP2 {memport "S_AXI_HP" sptag "HP2" memory "" is_range "false"} S_AXI_HP3 {memport "S_AXI_HP" sptag "HP3" memory "" is_range "false"}} [get_bd_cells /processing_system7_0]
 
 
-  validate_bd_design
   save_bd_design
 }
 # End of create_root_design()
@@ -1156,4 +1146,6 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
 
 create_root_design ""
 
+
+common::send_gid_msg -ssname BD::TCL -id 2053 -severity "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

@@ -50,3 +50,28 @@ platform clean
 platform generate
 platform clean
 platform clean
+platform active {zybo_z7_20_base_202201}
+platform clean
+platform generate
+platform clean
+platform generate
+domain config -qemu-args {/home/kodachi77/project/zybo-z7-vitis/os/images/linux/~qemu_args.txt}
+platform write
+domain config -qemu-args {/home/kodachi77/project/zybo-z7-vitis/os/images/linux/qemu_args.txt}
+platform write
+platform generate -domains 
+platform active {zybo_z7_20_base_202201}
+platform generate
+platform config -updatehw {/home/kodachi77/project/zybo-z7-vitis/hw/hw_handoff/zybo_z7_20_base_202201_wrapper.xsa}
+platform generate -domains 
+platform active {zybo_z7_20_base_202201}
+platform clean
+domain config -bif {/home/kodachi77/project/zybo-z7-vitis/os/images/linux/linux.bif}
+platform write
+platform generate
+platform clean
+platform generate
+platform clean
+platform generate
+platform config -updatehw {/home/kodachi77/project/zybo-z7-vitis/hw/hw_handoff/zybo_z7_20_base_202201_wrapper.xsa}
+platform generate -domains 

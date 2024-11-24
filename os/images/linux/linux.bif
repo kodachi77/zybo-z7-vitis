@@ -2,5 +2,6 @@ the_ROM_image:
 {
 	[bootloader] <zynq_fsbl.elf>
 	<bitstream>
-	<u-boot-dtb.elf>
+	<u-boot.elf>
+	[load=0x00100000] <system.dtb>
 }

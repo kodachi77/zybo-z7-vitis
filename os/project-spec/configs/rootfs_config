@@ -476,7 +476,7 @@ CONFIG_can-utils=y
 #
 # dropbear 
 #
-# CONFIG_dropbear=y
+# CONFIG_dropbear is not set
 # CONFIG_dropbear-dev is not set
 # CONFIG_dropbear-dbg is not set
 
@@ -2513,7 +2513,7 @@ CONFIG_packagegroup-core-buildessential=y
 #
 # packagegroup-core-ssh-dropbear 
 #
-# CONFIG_packagegroup-core-ssh-dropbear=y
+# CONFIG_packagegroup-core-ssh-dropbear is not set
 # CONFIG_packagegroup-core-ssh-dropbear-dbg is not set
 # CONFIG_packagegroup-core-ssh-dropbear-dev is not set
 

@@ -259,29 +259,6 @@
 
 /******************************************************************/
 
-/* Definitions for driver GPIO */
-#define XPAR_XGPIO_NUM_INSTANCES 1
-
-/* Definitions for peripheral AXI_GPIO_0 */
-#define XPAR_AXI_GPIO_0_BASEADDR 0x41200000
-#define XPAR_AXI_GPIO_0_HIGHADDR 0x4120FFFF
-#define XPAR_AXI_GPIO_0_DEVICE_ID 0
-#define XPAR_AXI_GPIO_0_INTERRUPT_PRESENT 0
-#define XPAR_AXI_GPIO_0_IS_DUAL 0
-
-
-/******************************************************************/
-
-/* Canonical definitions for peripheral AXI_GPIO_0 */
-#define XPAR_GPIO_0_BASEADDR 0x41200000
-#define XPAR_GPIO_0_HIGHADDR 0x4120FFFF
-#define XPAR_GPIO_0_DEVICE_ID XPAR_AXI_GPIO_0_DEVICE_ID
-#define XPAR_GPIO_0_INTERRUPT_PRESENT 0
-#define XPAR_GPIO_0_IS_DUAL 0
-
-
-/******************************************************************/
-
 /* Definitions for driver GPIOPS */
 #define XPAR_XGPIOPS_NUM_INSTANCES 1
 
@@ -297,6 +274,50 @@
 #define XPAR_XGPIOPS_0_DEVICE_ID XPAR_PS7_GPIO_0_DEVICE_ID
 #define XPAR_XGPIOPS_0_BASEADDR 0xE000A000
 #define XPAR_XGPIOPS_0_HIGHADDR 0xE000AFFF
+
+
+/******************************************************************/
+
+#define XPAR_INTC_MAX_NUM_INTR_INPUTS 1
+#define XPAR_XINTC_HAS_IPR 1
+#define XPAR_XINTC_HAS_SIE 1
+#define XPAR_XINTC_HAS_CIE 1
+#define XPAR_XINTC_HAS_IVR 1
+/* Definitions for driver INTC */
+#define XPAR_XINTC_NUM_INSTANCES 1
+
+/* Definitions for peripheral AXI_INTC_0 */
+#define XPAR_AXI_INTC_0_DEVICE_ID 0
+#define XPAR_AXI_INTC_0_BASEADDR 0x41800000
+#define XPAR_AXI_INTC_0_HIGHADDR 0x4180FFFF
+#define XPAR_AXI_INTC_0_KIND_OF_INTR 0xFFFFFFFF
+#define XPAR_AXI_INTC_0_HAS_FAST 0
+#define XPAR_AXI_INTC_0_IVAR_RESET_VALUE 0x0000000000000010
+#define XPAR_AXI_INTC_0_NUM_INTR_INPUTS 1
+#define XPAR_AXI_INTC_0_NUM_SW_INTR 0
+#define XPAR_AXI_INTC_0_ADDR_WIDTH 32
+
+
+/******************************************************************/
+
+#define XPAR_INTC_SINGLE_BASEADDR 0x41800000
+#define XPAR_INTC_SINGLE_HIGHADDR 0x4180FFFF
+#define XPAR_INTC_SINGLE_DEVICE_ID XPAR_AXI_INTC_0_DEVICE_ID
+#define XPAR_AXI_INTC_0_TYPE 0U
+
+/******************************************************************/
+
+/* Canonical definitions for peripheral AXI_INTC_0 */
+#define XPAR_INTC_0_DEVICE_ID XPAR_AXI_INTC_0_DEVICE_ID
+#define XPAR_INTC_0_BASEADDR 0x41800000U
+#define XPAR_INTC_0_HIGHADDR 0x4180FFFFU
+#define XPAR_INTC_0_KIND_OF_INTR 0xFFFFFFFFU
+#define XPAR_INTC_0_HAS_FAST 0U
+#define XPAR_INTC_0_IVAR_RESET_VALUE 0x0000000000000010U
+#define XPAR_INTC_0_NUM_INTR_INPUTS 1U
+#define XPAR_INTC_0_NUM_SW_INTR 0U
+#define XPAR_INTC_0_ADDR_WIDTH 32U
+#define XPAR_INTC_0_INTC_TYPE 0U
 
 
 /******************************************************************/
@@ -323,6 +344,16 @@
 #define XPAR_XQSPIPS_0_QSPI_MODE 0
 #define XPAR_XQSPIPS_0_QSPI_BUS_WIDTH 2
 
+
+/******************************************************************/
+
+/* Definitions for Fabric interrupts connected to ps7_scugic_0 */
+#define XPAR_FABRIC_AXI_INTC_0_IRQ_INTR 61U
+
+/******************************************************************/
+
+/* Canonical definitions for Fabric interrupts connected to ps7_scugic_0 */
+#define XPAR_FABRIC_INTC_0_VEC_ID XPAR_FABRIC_AXI_INTC_0_IRQ_INTR
 
 /******************************************************************/
 
