@@ -75,3 +75,10 @@ platform clean
 platform generate
 platform config -updatehw {/home/kodachi77/project/zybo-z7-vitis/hw/hw_handoff/zybo_z7_20_base_202201_wrapper.xsa}
 platform generate -domains 
+platform active {zybo_z7_20_base_202201}
+platform config -updatehw {/home/kodachi77/project/zybo-z7-vitis/hw/hw_handoff/zybo_z7_20_base_202201_wrapper.xsa}
+platform clean
+platform clean
+platform generate
+platform active {zybo_z7_20_base_202201}
+platform generate -domains 

@@ -1,5 +1,21 @@
 /include/ "system-conf.dtsi"
 / {
+	model = "Zynq Zybo Z7 Development Board";
+	compatible = "digilent,zynq-zyboz7", "xlnx,zynq-7000";
+
+	/*chosen {
+		bootargs = "console=ttyPS0,115200 earlyprintk uio_pdrv_genirq.of_id=generic-uio";
+	};
+
+	usb_phy0: usb_phy@0 {
+		compatible = "ulpi-phy";
+		#phy-cells = <0>;
+		reg = <0xe0002000 0x1000>;
+		view-port = <0x0170>;
+		drv-vbus;
+	};*/
+
+
 	/*amba {
 		zyxclmm_drm {
 			compatible = "xlnx,zocl";
@@ -8,4 +24,9 @@
 
 	};*/
 };
+
+/*&usb0 {	
+	dr_mode = "host";
+	usb-phy = <&usb_phy0>;
+};*/
 
