@@ -1,7 +1,6 @@
 variable platform_name
 set platform_name "Zybo-Z7-2022.1"
 
-# This is an automatically generated file used by digilent_vivado_checkout.tcl to set project options
 proc set_project_properties_post_create_project {proj_name} {
     set project_obj [get_projects $proj_name]
     set_property "part" "xc7z020clg400-1" $project_obj
@@ -18,7 +17,7 @@ proc set_project_properties_pre_add_repo {proj_name} {
 
 proc set_project_properties_post_create_runs {proj_name} {
     set project_obj [get_projects $proj_name]
-	#Custom directives for synthesis and implementation
+	# custom directives for synthesis and implementation
 	set_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE ExtraTimingOpt [get_runs impl_1]
 	set_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE Explore [get_runs impl_1]
 	set_property STEPS.ROUTE_DESIGN.ARGS.DIRECTIVE RuntimeOptimized [get_runs impl_1]
