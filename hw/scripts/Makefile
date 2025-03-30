@@ -6,10 +6,10 @@ all: project bitstream
 	@echo
 
 project:
-	vivado -mode batch -source checkout.tcl -notrace
+	vivado -mode batch -source generate_project.tcl -notrace
 
 bitstream:
-	@cd ../proj && vivado -mode batch -source ../scripts/build_bitstream.tcl -notrace || exit_code=$$? && cd ../scripts
+	@cd ../proj && vivado -mode batch -source ../scripts/generate_bitstream.tcl -notrace || exit_code=$$? && cd ../scripts
 	@if [ -n "$$exit_code" ]; then exit $$exit_code; fi
 
 clean:

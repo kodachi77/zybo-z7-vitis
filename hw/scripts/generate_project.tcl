@@ -1,10 +1,10 @@
 # Note: argument order does not matter when setting argv; all arguments are optional
 # Usage (No Defaults):
 #   set argv "-r <repo_path> -x <xpr_path> -v <vivado_version> -b -no-block"
-#   source digilent_vivado_checkout.tcl
+#   source checkout.tcl
 # Usage (All Defaults):
 #   set argv ""
-#   source digilent_vivado_checkout.tcl
+#   source checkout.tcl
 # TODO: add debug flag for argument checking
 
 # Handle repo_path argument
@@ -253,4 +253,3 @@ if {${build_when_checked_out}} {
 }
 
 puts "INFO: Project created: [file tail $proj_name]"
-puts "INFO: Exiting digilent_vivado_checkout"

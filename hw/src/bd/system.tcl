@@ -125,6 +125,7 @@ set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 xilinx.com:ip:axi_intc:4.1\
+xilinx.com:ip:axi_vip:1.1\
 xilinx.com:ip:clk_wiz:6.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:processing_system7:5.5\
@@ -237,11 +238,34 @@ proc create_root_design { parentCell } {
    CONFIG.C_IRQ_CONNECTION {1} \
  ] $axi_intc_0
 
-  # Create instance: axi_interconnect_0, and set properties
-  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+  # Create instance: axi_vip_0, and set properties
+  set axi_vip_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_vip:1.1 axi_vip_0 ]
   set_property -dict [ list \
-   CONFIG.NUM_MI {1} \
- ] $axi_interconnect_0
+   CONFIG.ADDR_WIDTH {32} \
+   CONFIG.ARUSER_WIDTH {0} \
+   CONFIG.AWUSER_WIDTH {0} \
+   CONFIG.BUSER_WIDTH {0} \
+   CONFIG.DATA_WIDTH {32} \
+   CONFIG.HAS_BRESP {1} \
+   CONFIG.HAS_BURST {1} \
+   CONFIG.HAS_CACHE {1} \
+   CONFIG.HAS_LOCK {1} \
+   CONFIG.HAS_PROT {1} \
+   CONFIG.HAS_QOS {1} \
+   CONFIG.HAS_REGION {1} \
+   CONFIG.HAS_RRESP {1} \
+   CONFIG.HAS_USER_BITS_PER_BYTE {0} \
+   CONFIG.HAS_WSTRB {1} \
+   CONFIG.ID_WIDTH {0} \
+   CONFIG.INTERFACE_MODE {MASTER} \
+   CONFIG.PROTOCOL {AXI4} \
+   CONFIG.READ_WRITE_MODE {READ_WRITE} \
+   CONFIG.RUSER_BITS_PER_BYTE {0} \
+   CONFIG.RUSER_WIDTH {0} \
+   CONFIG.SUPPORTS_NARROW {1} \
+   CONFIG.WUSER_BITS_PER_BYTE {0} \
+   CONFIG.WUSER_WIDTH {0} \
+ ] $axi_vip_0
 
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
@@ -249,34 +273,49 @@ proc create_root_design { parentCell } {
    CONFIG.CLKIN1_JITTER_PS {200.0} \
    CONFIG.CLKIN2_JITTER_PS {100.0} \
    CONFIG.CLKOUT1_DRIVES {BUFG} \
-   CONFIG.CLKOUT1_JITTER {214.854} \
-   CONFIG.CLKOUT1_PHASE_ERROR {155.997} \
+   CONFIG.CLKOUT1_JITTER {162.035} \
+   CONFIG.CLKOUT1_PHASE_ERROR {164.985} \
    CONFIG.CLKOUT2_DRIVES {BUFG} \
-   CONFIG.CLKOUT2_JITTER {185.991} \
-   CONFIG.CLKOUT2_PHASE_ERROR {155.997} \
-   CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {200.000} \
+   CONFIG.CLKOUT2_JITTER {150.257} \
+   CONFIG.CLKOUT2_PHASE_ERROR {164.985} \
+   CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {142} \
    CONFIG.CLKOUT2_USED {true} \
    CONFIG.CLKOUT3_DRIVES {BUFG} \
-   CONFIG.CLKOUT3_JITTER {173.176} \
-   CONFIG.CLKOUT3_PHASE_ERROR {155.997} \
-   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {300.00} \
+   CONFIG.CLKOUT3_JITTER {146.458} \
+   CONFIG.CLKOUT3_PHASE_ERROR {164.985} \
+   CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {166} \
    CONFIG.CLKOUT3_USED {true} \
    CONFIG.CLKOUT4_DRIVES {BUFG} \
+   CONFIG.CLKOUT4_JITTER {142.107} \
+   CONFIG.CLKOUT4_PHASE_ERROR {164.985} \
+   CONFIG.CLKOUT4_REQUESTED_OUT_FREQ {200} \
+   CONFIG.CLKOUT4_USED {true} \
    CONFIG.CLKOUT5_DRIVES {BUFG} \
+   CONFIG.CLKOUT5_JITTER {192.113} \
+   CONFIG.CLKOUT5_PHASE_ERROR {164.985} \
+   CONFIG.CLKOUT5_REQUESTED_OUT_FREQ {50} \
+   CONFIG.CLKOUT5_USED {true} \
    CONFIG.CLKOUT6_DRIVES {BUFG} \
+   CONFIG.CLKOUT6_JITTER {202.017} \
+   CONFIG.CLKOUT6_PHASE_ERROR {164.985} \
+   CONFIG.CLKOUT6_REQUESTED_OUT_FREQ {42} \
+   CONFIG.CLKOUT6_USED {true} \
    CONFIG.CLKOUT7_DRIVES {BUFG} \
    CONFIG.CLK_IN1_BOARD_INTERFACE {Custom} \
    CONFIG.FEEDBACK_SOURCE {FDBK_AUTO} \
    CONFIG.MMCM_BANDWIDTH {OPTIMIZED} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {24} \
+   CONFIG.MMCM_CLKFBOUT_MULT_F {20.000} \
    CONFIG.MMCM_CLKIN1_PERIOD {20.000} \
    CONFIG.MMCM_CLKIN2_PERIOD {10.0} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {12} \
-   CONFIG.MMCM_CLKOUT1_DIVIDE {6} \
-   CONFIG.MMCM_CLKOUT2_DIVIDE {4} \
+   CONFIG.MMCM_CLKOUT0_DIVIDE_F {10.000} \
+   CONFIG.MMCM_CLKOUT1_DIVIDE {7} \
+   CONFIG.MMCM_CLKOUT2_DIVIDE {6} \
+   CONFIG.MMCM_CLKOUT3_DIVIDE {5} \
+   CONFIG.MMCM_CLKOUT4_DIVIDE {20} \
+   CONFIG.MMCM_CLKOUT5_DIVIDE {24} \
    CONFIG.MMCM_COMPENSATION {ZHOLD} \
    CONFIG.MMCM_DIVCLK_DIVIDE {1} \
-   CONFIG.NUM_OUT_CLKS {3} \
+   CONFIG.NUM_OUT_CLKS {6} \
    CONFIG.OVERRIDE_MMCM {false} \
    CONFIG.PLL_CLKIN_PERIOD {20.000} \
    CONFIG.PRIMITIVE {MMCM} \
@@ -289,17 +328,32 @@ proc create_root_design { parentCell } {
    CONFIG.USE_INCLK_SWITCHOVER {false} \
  ] $clk_wiz_0
 
-  # Create instance: proc_sys_reset_0, and set properties
-  set proc_sys_reset_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0 ]
+  # Create instance: interconnect_axifull, and set properties
+  set interconnect_axifull [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 interconnect_axifull ]
+  set_property -dict [ list \
+   CONFIG.NUM_MI {1} \
+ ] $interconnect_axifull
 
-  # Create instance: proc_sys_reset_1, and set properties
-  set proc_sys_reset_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_1 ]
+  # Create instance: proc_sys_reset_100MHz, and set properties
+  set proc_sys_reset_100MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_100MHz ]
 
-  # Create instance: proc_sys_reset_2, and set properties
-  set proc_sys_reset_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_2 ]
+  # Create instance: proc_sys_reset_142MHz, and set properties
+  set proc_sys_reset_142MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_142MHz ]
 
-  # Create instance: processing_system7_0, and set properties
-  set processing_system7_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0 ]
+  # Create instance: proc_sys_reset_166MHz, and set properties
+  set proc_sys_reset_166MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_166MHz ]
+
+  # Create instance: proc_sys_reset_200MHz, and set properties
+  set proc_sys_reset_200MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_200MHz ]
+
+  # Create instance: proc_sys_reset_42MHz, and set properties
+  set proc_sys_reset_42MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_42MHz ]
+
+  # Create instance: proc_sys_reset_50MHz, and set properties
+  set proc_sys_reset_50MHz [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_50MHz ]
+
+  # Create instance: ps7, and set properties
+  set ps7 [ create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 ps7 ]
   set_property -dict [ list \
    CONFIG.PCW_ACT_APU_PERIPHERAL_FREQMHZ {666.666687} \
    CONFIG.PCW_ACT_CAN0_PERIPHERAL_FREQMHZ {23.8095} \
@@ -426,7 +480,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_EN_EMIO_ENET0 {0} \
    CONFIG.PCW_EN_EMIO_ENET1 {0} \
    CONFIG.PCW_EN_EMIO_GPIO {0} \
-   CONFIG.PCW_EN_EMIO_I2C0 {0} \
+   CONFIG.PCW_EN_EMIO_I2C0 {1} \
    CONFIG.PCW_EN_EMIO_I2C1 {0} \
    CONFIG.PCW_EN_EMIO_MODEM_UART0 {0} \
    CONFIG.PCW_EN_EMIO_MODEM_UART1 {0} \
@@ -437,7 +491,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_EN_EMIO_SPI1 {0} \
    CONFIG.PCW_EN_EMIO_SRAM_INT {0} \
    CONFIG.PCW_EN_EMIO_TRACE {0} \
-   CONFIG.PCW_EN_EMIO_TTC0 {0} \
+   CONFIG.PCW_EN_EMIO_TTC0 {1} \
    CONFIG.PCW_EN_EMIO_TTC1 {0} \
    CONFIG.PCW_EN_EMIO_UART0 {0} \
    CONFIG.PCW_EN_EMIO_UART1 {0} \
@@ -447,7 +501,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_EN_ENET0 {1} \
    CONFIG.PCW_EN_ENET1 {0} \
    CONFIG.PCW_EN_GPIO {1} \
-   CONFIG.PCW_EN_I2C0 {0} \
+   CONFIG.PCW_EN_I2C0 {1} \
    CONFIG.PCW_EN_I2C1 {0} \
    CONFIG.PCW_EN_MODEM_UART0 {0} \
    CONFIG.PCW_EN_MODEM_UART1 {0} \
@@ -465,7 +519,7 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_EN_SPI0 {0} \
    CONFIG.PCW_EN_SPI1 {0} \
    CONFIG.PCW_EN_TRACE {0} \
-   CONFIG.PCW_EN_TTC0 {0} \
+   CONFIG.PCW_EN_TTC0 {1} \
    CONFIG.PCW_EN_TTC1 {0} \
    CONFIG.PCW_EN_UART0 {0} \
    CONFIG.PCW_EN_UART1 {1} \
@@ -510,16 +564,18 @@ proc create_root_design { parentCell } {
    CONFIG.PCW_GPIO_MIO_GPIO_IO {MIO} \
    CONFIG.PCW_GPIO_PERIPHERAL_ENABLE {0} \
    CONFIG.PCW_I2C0_BASEADDR {0xE0004000} \
-   CONFIG.PCW_I2C0_GRP_INT_ENABLE {0} \
+   CONFIG.PCW_I2C0_GRP_INT_ENABLE {1} \
+   CONFIG.PCW_I2C0_GRP_INT_IO {EMIO} \
    CONFIG.PCW_I2C0_HIGHADDR {0xE0004FFF} \
-   CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {0} \
+   CONFIG.PCW_I2C0_I2C0_IO {EMIO} \
+   CONFIG.PCW_I2C0_PERIPHERAL_ENABLE {1} \
    CONFIG.PCW_I2C0_RESET_ENABLE {0} \
    CONFIG.PCW_I2C1_BASEADDR {0xE0005000} \
    CONFIG.PCW_I2C1_GRP_INT_ENABLE {0} \
    CONFIG.PCW_I2C1_HIGHADDR {0xE0005FFF} \
    CONFIG.PCW_I2C1_PERIPHERAL_ENABLE {0} \
    CONFIG.PCW_I2C1_RESET_ENABLE {0} \
-   CONFIG.PCW_I2C_PERIPHERAL_FREQMHZ {25} \
+   CONFIG.PCW_I2C_PERIPHERAL_FREQMHZ {111.111115} \
    CONFIG.PCW_I2C_RESET_ENABLE {0} \
    CONFIG.PCW_I2C_RESET_POLARITY {Active Low} \
    CONFIG.PCW_IMPORT_BOARD_PRESET {None} \
@@ -948,7 +1004,8 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
    CONFIG.PCW_TTC0_CLK2_PERIPHERAL_DIVISOR0 {1} \
    CONFIG.PCW_TTC0_CLK2_PERIPHERAL_FREQMHZ {133.333333} \
    CONFIG.PCW_TTC0_HIGHADDR {0xE0104fff} \
-   CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {0} \
+   CONFIG.PCW_TTC0_PERIPHERAL_ENABLE {1} \
+   CONFIG.PCW_TTC0_TTC0_IO {EMIO} \
    CONFIG.PCW_TTC1_BASEADDR {0xE0105000} \
    CONFIG.PCW_TTC1_CLK0_PERIPHERAL_CLKSRC {CPU_1X} \
    CONFIG.PCW_TTC1_CLK0_PERIPHERAL_DIVISOR0 {1} \
@@ -1089,7 +1146,7 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
    CONFIG.PCW_USE_S_AXI_ACP {0} \
    CONFIG.PCW_USE_S_AXI_GP0 {0} \
    CONFIG.PCW_USE_S_AXI_GP1 {0} \
-   CONFIG.PCW_USE_S_AXI_HP0 {0} \
+   CONFIG.PCW_USE_S_AXI_HP0 {1} \
    CONFIG.PCW_USE_S_AXI_HP1 {0} \
    CONFIG.PCW_USE_S_AXI_HP2 {0} \
    CONFIG.PCW_USE_S_AXI_HP3 {0} \
@@ -1100,28 +1157,44 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
    CONFIG.PCW_WDT_PERIPHERAL_DIVISOR0 {1} \
    CONFIG.PCW_WDT_PERIPHERAL_ENABLE {0} \
    CONFIG.PCW_WDT_PERIPHERAL_FREQMHZ {133.333333} \
- ] $processing_system7_0
+ ] $ps7
 
-  set_property SELECTED_SIM_MODEL tlm  $processing_system7_0
+  set_property SELECTED_SIM_MODEL tlm  $ps7
+
+  # Create instance: ps7_axi_periph, and set properties
+  set ps7_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps7_axi_periph ]
+  set_property -dict [ list \
+   CONFIG.NUM_MI {1} \
+ ] $ps7_axi_periph
+
+  # Create instance: rst_ps7_50M, and set properties
+  set rst_ps7_50M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_50M ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_intc_0/s_axi] [get_bd_intf_pins axi_interconnect_0/M00_AXI]
-  connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
-  connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
-  connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins processing_system7_0/M_AXI_GP0]
+  connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_intc_0/s_axi] [get_bd_intf_pins ps7_axi_periph/M00_AXI]
+  connect_bd_intf_net -intf_net axi_interconnect_1_M00_AXI [get_bd_intf_pins interconnect_axifull/M00_AXI] [get_bd_intf_pins ps7/S_AXI_HP0]
+  connect_bd_intf_net -intf_net axi_vip_0_M_AXI [get_bd_intf_pins axi_vip_0/M_AXI] [get_bd_intf_pins interconnect_axifull/S00_AXI]
+  connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins ps7/DDR]
+  connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins ps7/FIXED_IO]
+  connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins ps7/M_AXI_GP0] [get_bd_intf_pins ps7_axi_periph/S00_AXI]
 
   # Create port connections
-  connect_bd_net -net axi_intc_0_irq [get_bd_pins axi_intc_0/irq] [get_bd_pins processing_system7_0/IRQ_F2P]
-  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_intc_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins proc_sys_reset_0/slowest_sync_clk] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK]
-  connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins proc_sys_reset_1/slowest_sync_clk]
-  connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_pins clk_wiz_0/clk_out3] [get_bd_pins proc_sys_reset_2/slowest_sync_clk]
-  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_0/dcm_locked] [get_bd_pins proc_sys_reset_1/dcm_locked] [get_bd_pins proc_sys_reset_2/dcm_locked]
-  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins axi_intc_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins processing_system7_0/FCLK_CLK0]
-  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins proc_sys_reset_1/ext_reset_in] [get_bd_pins proc_sys_reset_2/ext_reset_in] [get_bd_pins processing_system7_0/FCLK_RESET0_N]
+  connect_bd_net -net axi_intc_0_irq [get_bd_pins axi_intc_0/irq] [get_bd_pins ps7/IRQ_F2P]
+  connect_bd_net -net clk_wiz_0_clk_out1 [get_bd_pins axi_intc_0/s_axi_aclk] [get_bd_pins axi_vip_0/aclk] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins interconnect_axifull/S00_ACLK] [get_bd_pins proc_sys_reset_100MHz/slowest_sync_clk] [get_bd_pins ps7/M_AXI_GP0_ACLK] [get_bd_pins ps7_axi_periph/ACLK] [get_bd_pins ps7_axi_periph/M00_ACLK] [get_bd_pins ps7_axi_periph/S00_ACLK]
+  connect_bd_net -net clk_wiz_0_clk_out2 [get_bd_pins clk_wiz_0/clk_out2] [get_bd_pins proc_sys_reset_142MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_out3 [get_bd_pins clk_wiz_0/clk_out3] [get_bd_pins proc_sys_reset_166MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_out4 [get_bd_pins clk_wiz_0/clk_out4] [get_bd_pins proc_sys_reset_200MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_out5 [get_bd_pins clk_wiz_0/clk_out5] [get_bd_pins proc_sys_reset_50MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_clk_out6 [get_bd_pins clk_wiz_0/clk_out6] [get_bd_pins proc_sys_reset_42MHz/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_100MHz/dcm_locked] [get_bd_pins proc_sys_reset_142MHz/dcm_locked] [get_bd_pins proc_sys_reset_166MHz/dcm_locked] [get_bd_pins proc_sys_reset_200MHz/dcm_locked] [get_bd_pins proc_sys_reset_42MHz/dcm_locked] [get_bd_pins proc_sys_reset_50MHz/dcm_locked]
+  connect_bd_net -net proc_sys_reset_0_peripheral_aresetn [get_bd_pins axi_intc_0/s_axi_aresetn] [get_bd_pins axi_vip_0/aresetn] [get_bd_pins interconnect_axifull/S00_ARESETN] [get_bd_pins proc_sys_reset_100MHz/peripheral_aresetn] [get_bd_pins ps7_axi_periph/ARESETN] [get_bd_pins ps7_axi_periph/M00_ARESETN] [get_bd_pins ps7_axi_periph/S00_ARESETN]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins interconnect_axifull/ACLK] [get_bd_pins interconnect_axifull/M00_ACLK] [get_bd_pins ps7/FCLK_CLK0] [get_bd_pins ps7/S_AXI_HP0_ACLK] [get_bd_pins rst_ps7_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins clk_wiz_0/resetn] [get_bd_pins proc_sys_reset_100MHz/ext_reset_in] [get_bd_pins proc_sys_reset_142MHz/ext_reset_in] [get_bd_pins proc_sys_reset_166MHz/ext_reset_in] [get_bd_pins proc_sys_reset_200MHz/ext_reset_in] [get_bd_pins proc_sys_reset_42MHz/ext_reset_in] [get_bd_pins proc_sys_reset_50MHz/ext_reset_in] [get_bd_pins ps7/FCLK_RESET0_N] [get_bd_pins rst_ps7_50M/ext_reset_in]
+  connect_bd_net -net rst_ps7_50M_peripheral_aresetn [get_bd_pins interconnect_axifull/ARESETN] [get_bd_pins interconnect_axifull/M00_ARESETN] [get_bd_pins rst_ps7_50M/peripheral_aresetn]
 
   # Create address segments
-  assign_bd_address -offset 0x41800000 -range 0x00010000 -target_address_space [get_bd_addr_spaces processing_system7_0/Data] [get_bd_addr_segs axi_intc_0/S_AXI/Reg] -force
+  assign_bd_address -offset 0x00000000 -range 0x40000000 -target_address_space [get_bd_addr_spaces axi_vip_0/Master_AXI] [get_bd_addr_segs ps7/S_AXI_HP0/HP0_DDR_LOWOCM] -force
+  assign_bd_address -offset 0x70000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces ps7/Data] [get_bd_addr_segs axi_intc_0/S_AXI/Reg] -force
 
 
   # Restore current instance
@@ -1130,9 +1203,10 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
   # Create PFM attributes
   set_property PFM_NAME {Digilent:zybo-z7-20:zybo_z7_20_base_202201:1.0} [get_files [current_bd_design].bd]
   set_property PFM.IRQ {intr { id 0 range 32 }} [get_bd_cells /axi_intc_0]
-  set_property PFM.AXI_PORT {M01_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M02_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M03_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M04_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M05_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M06_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M07_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M08_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M09_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M10_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M11_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M12_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M13_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M14_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M15_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M16_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M17_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M18_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M19_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M20_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M21_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M22_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M23_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M24_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M25_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M26_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M27_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M28_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M29_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M30_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M31_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"}} [get_bd_cells /axi_interconnect_0]
-  set_property PFM.CLOCK {clk_out1 {id "0" is_default "true" proc_sys_reset "/proc_sys_reset_0" status "fixed" freq_hz "100000000"} clk_out2 {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_1" status "fixed" freq_hz "200000000"} clk_out3 {id "2" is_default "false" proc_sys_reset "/proc_sys_reset_2" status "fixed" freq_hz "300000000"}} [get_bd_cells /clk_wiz_0]
-  set_property PFM.AXI_PORT {M_AXI_GP1 {memport "M_AXI_GP" sptag "" memory "" is_range "false"} S_AXI_HP0 {memport "S_AXI_HP" sptag "HP0" memory "" is_range "false"} S_AXI_HP1 {memport "S_AXI_HP" sptag "HP1" memory "" is_range "false"} S_AXI_HP2 {memport "S_AXI_HP" sptag "HP2" memory "" is_range "false"} S_AXI_HP3 {memport "S_AXI_HP" sptag "HP3" memory "" is_range "false"}} [get_bd_cells /processing_system7_0]
+  set_property PFM.CLOCK {clk_out1 {id "2" is_default "true" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "100000000"} clk_out2 {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_142MHz" status "fixed" freq_hz "142857142"} clk_out3 {id "0" is_default "false" proc_sys_reset "/proc_sys_reset_166MHz" status "fixed" freq_hz "166666666"} clk_out4 {id "3" is_default "false" proc_sys_reset "/proc_sys_reset_200MHz" status "fixed" freq_hz "200000000"} clk_out5 {id "4" is_default "false" proc_sys_reset "/proc_sys_reset_50MHz" status "fixed" freq_hz "50000000"} clk_out6 {id "5" is_default "false" proc_sys_reset "/proc_sys_reset_42MHz" status "fixed" freq_hz "41666666"}} [get_bd_cells /clk_wiz_0]
+  set_property PFM.AXI_PORT {S01_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S02_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S03_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S04_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S05_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S06_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S07_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S08_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S09_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S10_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S11_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S12_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S13_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S14_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S15_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"}} [get_bd_cells /interconnect_axifull]
+  set_property PFM.AXI_PORT {M_AXI_GP1 {memport "M_AXI_GP" sptag "GP" memory "" is_range "false"} S_AXI_HP1 {memport "S_AXI_HP" sptag "HP1" memory "ps7 HP1_DDR_LOWOCM" is_range "false"} S_AXI_HP2 {memport "S_AXI_HP" sptag "HP2" memory "ps7 HP2_DDR_LOWOCM" is_range "false"} S_AXI_HP3 {memport "S_AXI_HP" sptag "HP3" memory "ps7 HP3_DDR_LOWOCM" is_range "false"}} [get_bd_cells /ps7]
+  set_property PFM.AXI_PORT {M01_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M02_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M03_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M04_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M05_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M06_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M07_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M08_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M09_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M10_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M11_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M12_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M13_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M14_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M15_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M16_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M17_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M18_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M19_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M20_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M21_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M22_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M23_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M24_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M25_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M26_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M27_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M28_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M29_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M30_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"} M31_AXI {memport "M_AXI_GP" sptag "" memory "" is_range "false"}} [get_bd_cells /ps7_axi_periph]
 
 
   save_bd_design
