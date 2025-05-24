@@ -1,6 +1,6 @@
 
 ################################################################
-# This is a generated script based on design: zybo_z7_20_base_202201
+# This is a generated script based on design: system
 #
 # Though there are limitations about the generated script,
 # the main purpose of this utility is to make learning
@@ -35,7 +35,7 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 ################################################################
 
 # To test this script, run the following commands from Vivado Tcl console:
-# source zybo_z7_20_base_202201_script.tcl
+# source system.tcl
 
 # If there is no project opened, this script will create a
 # project, but make sure you do not have an existing project
@@ -50,7 +50,7 @@ if { $list_projs eq "" } {
 
 # CHANGE DESIGN NAME HERE
 variable design_name
-set design_name zybo_z7_20_base_202201
+set design_name system
 
 # If you do not already have an existing IP Integrator design open,
 # you can create a design using the following command:
@@ -1201,7 +1201,7 @@ gpio[0]#qspi0_ss_b#qspi0_io[0]#qspi0_io[1]#qspi0_io[2]#qspi0_io[3]/HOLD_B#qspi0_
   current_bd_instance $oldCurInst
 
   # Create PFM attributes
-  set_property PFM_NAME {Digilent:zybo-z7-20:zybo_z7_20_base_202201:1.0} [get_files [current_bd_design].bd]
+  set_property PFM_NAME {Digilent:zybo-z7-20:system:1.0} [get_files [current_bd_design].bd]
   set_property PFM.IRQ {intr { id 0 range 32 }} [get_bd_cells /axi_intc_0]
   set_property PFM.CLOCK {clk_out1 {id "2" is_default "true" proc_sys_reset "/proc_sys_reset_100MHz" status "fixed" freq_hz "100000000"} clk_out2 {id "1" is_default "false" proc_sys_reset "/proc_sys_reset_142MHz" status "fixed" freq_hz "142857142"} clk_out3 {id "0" is_default "false" proc_sys_reset "/proc_sys_reset_166MHz" status "fixed" freq_hz "166666666"} clk_out4 {id "3" is_default "false" proc_sys_reset "/proc_sys_reset_200MHz" status "fixed" freq_hz "200000000"} clk_out5 {id "4" is_default "false" proc_sys_reset "/proc_sys_reset_50MHz" status "fixed" freq_hz "50000000"} clk_out6 {id "5" is_default "false" proc_sys_reset "/proc_sys_reset_42MHz" status "fixed" freq_hz "41666666"}} [get_bd_cells /clk_wiz_0]
   set_property PFM.AXI_PORT {S01_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S02_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S03_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S04_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S05_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S06_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S07_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S08_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S09_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S10_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S11_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S12_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S13_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S14_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"} S15_AXI {memport "S_AXI_HP" sptag "HP0" memory "ps7 HP0_DDR_LOWOCM" is_range "false"}} [get_bd_cells /interconnect_axifull]

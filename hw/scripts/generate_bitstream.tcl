@@ -1,5 +1,17 @@
-set overlay_name "hw"
-set design_name "zybo_z7_20_base_202201"
+# parsing options
+set options [dict create {*}$argv]
+
+set pre_synth [expr {[string tolower [dict get $options pre_synth]] in {"1" "true" "yes"}}]
+set platform_name [dict get $options platform]
+set platform_version [dict get $options version]
+set xsa_path [dict get $options xsa_path]
+set xsa_hw_emu_path [dict get $options xsa_hw_emu_path]
+set bitfile_path [dict get $options bitfile_path]
+set readme_path [dict get $options readme_path]
+
+#set overlay_name "hw"
+set project_name [file rootname [file tail $xsa_path]]
+set design_name system
 
 set root_path [file normalize [file dirname [info script]]/..]
 
@@ -8,8 +20,8 @@ source [file join ${root_path} project_info.tcl]
 set_param board.repoPaths "$::env(HOME)/.Xilinx/Vivado/2022.1/xhub/board_store/xilinx_board_store"
 
 # open block design
-open_project ${overlay_name}.xpr
-open_bd_design ${overlay_name}.srcs/sources_1/bd/${design_name}/${design_name}.bd
+open_project ${project_name}.xpr
+open_bd_design ${project_name}.srcs/sources_1/bd/${design_name}/${design_name}.bd
 
 
 # set platform properties
@@ -29,31 +41,27 @@ launch_simulation -step compile
 launch_simulation -step elaborate
 
 # generate emulation xsa
-file mkdir ../hw_handoff/hw_emu
-write_hw_platform -force -hw_emu -file ../hw_handoff/hw_emu/${overlay_name}.xsa
+write_hw_platform -force -hw_emu -file ${xsa_hw_emu_path} 
 
-set pre_synth false
-
-if { $argc >= 1} {
-  set pre_synth [lindex $argv 0]
-}
 if {$pre_synth} {
   set_property platform.platform_state "pre_synth" [current_project]
-  write_hw_platform -hw -force -file ../hw_handoff/${overlay_name}.xsa
-} else {
+  write_hw_platform -hw -force -file ${xsa_path} 
+ else {
   launch_runs impl_1 -to_step write_bitstream -jobs 4
   wait_on_run impl_1
-  write_hw_platform -include_bit -force -file ../hw_handoff/${overlay_name}.xsa
+  open_run impl_1
+  write_bitstream -force ${bitfile_path} 
+  write_hw_platform -include_bit -force -file ${xsa_path} 
 }
 
-validate_hw_platform ../hw_handoff/${overlay_name}.xsa
+validate_hw_platform ${xsa_path} 
 
 # needs GUI mode
 # write_bd_layout -format pdf -orientation landscape -force ${root_path}/hw_handoff/system.pdf
 
-#generate README.txt
+# generate README.txt
 
-set fd [open ../hw_handoff/README.txt w] 
+set fd [open ${readme_path} w] 
 
 puts $fd "##############################################################################################"
 puts $fd "# This is a brief document containing design specific details for HW platform."
