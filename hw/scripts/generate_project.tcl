@@ -62,6 +62,7 @@ puts "INFO: Creating new project \"$proj_name\" in [file dirname $xpr_path]"
 set_param board.repoPaths "$::env(HOME)/.Xilinx/Vivado/$vivado_version/xhub/board_store/xilinx_board_store"
 
 # Create project
+file mkdir [file dirname $xpr_path]
 create_project $proj_name [file dirname $xpr_path]
 
 source $root_path/project_info.tcl

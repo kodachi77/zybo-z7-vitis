@@ -7,14 +7,12 @@
 !README.md
 !LICENSE
 !project_info.tcl
-!proj/
 !repo/
 !src/
 !scripts/
-!hw_handoff/
 
 # vivado workspace
-proj/*
+proj
 *.jou
 *.log
 

@@ -44,7 +44,7 @@ PETALINUX_BUILD  ?= FALSE
 TOP_DIR          ?= $(shell readlink -f .)
 
 # hw related
-XSA_DIR           = $(TOP_DIR)/hw/hw_handoff
+XSA_DIR           = $(TOP_DIR)/hw_handoff
 SW_DIR            = $(TOP_DIR)/sw/build
 
 PROJECT_NAME      = hw
