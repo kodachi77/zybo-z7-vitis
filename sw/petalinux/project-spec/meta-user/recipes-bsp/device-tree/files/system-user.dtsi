@@ -1,0 +1,5 @@
+/include/ "system-conf.dtsi"
+/ {
+	model = "Zybo Z7 Development Board";
+	compatible = "digilent,zynq-zyboz7", "xlnx,zynq-7000";
+};

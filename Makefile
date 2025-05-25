@@ -27,4 +27,9 @@ all platform: $(XSA) $(SW_FILES)
 clean:
 	$(MAKE) -C hw clean
 	$(MAKE) -C sw clean
+	${RM} -r .Xil
+
+mrproper:
+	$(MAKE) -C hw mrproper
+	$(MAKE) -C sw mrproper
 	${RM} -r $(PLATFORM_DIR)

@@ -19,7 +19,7 @@ $(DTB_FILE): $(XSA)
 	@if [ ! -d $(BOOT_DIR) ]; then mkdir -p $(BOOT_DIR); fi
 	mkdir -p $(SW_DIR)/tmp
 	$(info "DTB generation started using XSCT")
-	$(XSCT) -eval "setws $(SW_DIR)/tmp; createdts -hw $(XSA) -git-url https://github.com/kodachi77/device-tree-xlnx -git-branch xlnx_rel_v2022.1 -board $(BOARD) -platform $(PLATFORM) -zocl -out $(SW_DIR)/tmp"
+	$(XSCT) -eval "setws $(SW_DIR)/tmp; createdts -hw $(XSA) -git-url https://github.com/kodachi77/device-tree-xlnx -git-branch xlnx_rel_$(VIVADO_VERSION) -board $(BOARD) -platform $(PLATFORM) -zocl -out $(SW_DIR)/tmp"
 	$(eval BSP_PATH = $(SW_DIR)/tmp/$(PLATFORM)/$(CORE)/device_tree_domain/bsp/)
 	cp -rf $(SYSTEM_CONF_DTS) $(BSP_PATH)
 	cp -rf $(SYSTEM_USER_DTSI) $(BSP_PATH)
@@ -83,3 +83,5 @@ $(BOOT_IMAGE): $(BIT_FILE) $(SW_FILES)
 #	mkdir -p $(SW_DIR)/platform/filesystem
 #	cp -f $(PREBUILT_LINUX_PATH)/rootfs.ext4 $(SW_DIR)/platform/filesystem/rootfs.ext4
 
+mrproper:
+	@echo Running mrproper
