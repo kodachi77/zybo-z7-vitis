@@ -47,10 +47,14 @@ TOP_DIR          ?= $(shell readlink -f .)
 XSA_DIR           = $(TOP_DIR)/hw/hw_handoff
 SW_DIR            = $(TOP_DIR)/sw/build
 
-XSA               = $(XSA_DIR)/hw.xsa
-HW_EMU_XSA        = $(XSA_DIR)/hw_emu/hw.xsa
-BIT_FILE          = $(XSA_DIR)/hw.bit
+PROJECT_NAME      = hw
+
+XSA               = $(XSA_DIR)/$(PROJECT_NAME).xsa
+HW_EMU_XSA        = $(XSA_DIR)/hw_emu/$(PROJECT_NAME).xsa
+BIT_FILE          = $(XSA_DIR)/$(PROJECT_NAME).bit
 README_FILE       = $(XSA_DIR)/README.txt
+
+
 
 # sw related
 BOOT_DIR          = $(SW_DIR)/platform/boot
