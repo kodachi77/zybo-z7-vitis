@@ -7,7 +7,11 @@ set emu_xsa_path [dict get $options emu_xsa_path]
 set platform_out [dict get $options platform_out]
 set boot_dir_path [dict get $options boot_dir_path]
 set img_dir_path [dict get $options img_dir_path]
+set rootfs_file [dict get $options rootfs_file]
+set sysroot_path [dict get $options sysroot_path]
 set generate_sw [dict get $options generate_sw]
+
+set image_path [file dirname $rootfs_file]
 
 set plat_arg [list]
 if {$xsa_path ne "" && [file exists $xsa_path] } {
@@ -24,7 +28,7 @@ if {$generate_sw} {
   # Generate sw components(eg: fsbl, pmufw)
   platform -name $platform_name {*}$plat_arg -out $platform_out
   domain -name xrt -proc ps7_cortexa9 -os linux -sd-dir $img_dir_path
-  platform -generate
+  platform generate
   exit
 }
 
@@ -35,7 +39,30 @@ domain config -boot $boot_dir_path
 domain config -generate-bif
 domain -runtime opencl
 domain -qemu-data $boot_dir_path
-#domain -sysroot ./src/aarch64-xilinx-linux
 
-platform -generate
+set image_file [file join $img_dir_path uImage]
+
+if {[file isfile $image_file]} {
+  domain config -image $img_dir_path
+} else {
+    puts "WARNING: $image_file not found. Skipping -image domain"
+}
+
+
+set usr_include_path [file join $sysroot_path usr include]
+
+if {[file isfile $rootfs_file]} {
+  domain config -rootfs $rootfs_file
+} else {
+    puts "WARNING: $rootfs_file not found. Skipping -rootfs domain"
+}
+
+
+if {[file isdirectory $usr_include_path]} {
+    domain config -sysroot $sysroot_path
+} else {
+    puts "WARNING: /usr/include not found in $sysroot_path. Skipping -sysroot domain"
+}
+
+platform generate
 exit

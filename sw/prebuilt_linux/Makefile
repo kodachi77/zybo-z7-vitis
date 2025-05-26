@@ -7,7 +7,7 @@ SYSTEM_CONF_DTS  = $(CWD)/user_dts/system-conf.dtsi
 
 IMG_ROOTFS_FILES = $(IMAGE_DIR)/uImage $(SW_BUILD_DIR)/platform/filesystem/rootfs.ext4
 PREBUILT_ROOTFS_FILES = $(PREBUILT_LINUX_PATH)/uImage $(PREBUILT_LINUX_PATH)/rootfs.ext4
-PREBUILT_SYSROOT = $(PREBUILT_LINUX_PATH)/sdk.sh
+PREBUILT_SDK = $(PREBUILT_LINUX_PATH)/sdk.sh
 
 .PHONY: all sw_comp dtb bootimage rootfs sysroot clean mrproper
 
@@ -36,6 +36,7 @@ sw_comp: $(SW_FILES)
 
 $(SW_FILES): $(DTB_FILE)
 	mkdir -p $(IMAGE_DIR)
+	mkdir -p $(SYSROOT)
 	cp -f $(PREBUILT_LINUX_PATH)/boot.scr ${IMAGE_DIR}/boot.scr
 	$(foreach BOOT_FILE,$(BOOT_FILES),cp -f $(PREBUILT_LINUX_PATH)/$(BOOT_FILE) $(BOOT_DIR) ;)
 	
@@ -47,6 +48,8 @@ $(SW_FILES): $(DTB_FILE)
 		platform_out "${PLATFORM_DIR}" \
 		boot_dir_path "${BOOT_DIR}" \
 		img_dir_path "${IMAGE_DIR}" \
+		rootfs_file "$(SW_BUILD_DIR)/platform/filesystem/rootfs.ext4" \
+		sysroot_path "${SYSROOT_DIR}" \
 		generate_sw true
 	$(eval BOOT_ARTIFACTS = ${PLATFORM_DIR}/${PLATFORM_NAME}/export/${PLATFORM_NAME}/sw/${PLATFORM_NAME}/boot)
 	# we want to fail if there are no boot artifacts
@@ -62,7 +65,7 @@ bootimage: $(BOOT_IMAGE)
 
 $(BOOT_IMAGE): $(BIT_FILE) $(SW_FILES)
 	$(info "BOOT image for platforms")
-ifeq ($(PRE_SYNTH),TRUE)	
+ifeq ($(PRE_SYNTH),TRUE)
 	$(BOOTGEN) -arch $(PLATFORM_TYPE) -image $(CWD)/bootgen-pre-synth.bif -o $(BOOT_IMAGE) -w
 else
 	$(BOOTGEN) -arch $(PLATFORM_TYPE) -image $(CWD)/bootgen.bif -o $(BOOT_IMAGE) -w
@@ -78,7 +81,7 @@ $(IMG_ROOTFS_FILES): $(PREBUILT_ROOTFS_FILES)
 
 sysroot:
 	mkdir -p $(SYSROOT)
-	$(PREBUILT_SYSROOT) -y -d $(SYSROOT)
+	@if [ ! -d $(SYSROOT_DIR)/usr/include ]; then $(PREBUILT_SDK) -y -d $(SYSROOT); fi
 
 clean:
 	${RM} -r $(SW_BUILD_DIR)

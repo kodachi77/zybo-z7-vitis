@@ -67,7 +67,8 @@ BOOT_IMAGE        = $(BOOT_DIR)/BOOT.BIN
 SW_FILES          = $(IMAGE_DIR)/boot.scr $(BOOT_DIR)/u-boot.elf
 BOOT_FILES        = u-boot.elf
 
-SYSROOT           = $(TOP_DIR)/platform_repo/sysroot
+SYSROOT           = $(SW_BUILD_DIR)/platform/sysroot
+SYSROOT_DIR       = $(SYSROOT)/sysroots/cortexa9t2hf-neon-xilinx-linux-gnueabi
 
 # platform related
 PLATFORM_NAME     = $(PLATFORM)_$(VERSION)
