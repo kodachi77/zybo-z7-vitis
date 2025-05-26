@@ -3,11 +3,15 @@ TOP_DIR = $(CWD)/../..
 include $(TOP_DIR)/platform.mk
 
 SYSTEM_USER_DTSI = $(CWD)/user_dts/system-user.dtsi
-SYSTEM_CONF_DTS  =  $(CWD)/user_dts/system-conf.dtsi
+SYSTEM_CONF_DTS  = $(CWD)/user_dts/system-conf.dtsi
 
-IMG_ROOTFS_FILES = $(IMAGE_DIR)/uImage $(SW_DIR)/platform/filesystem/rootfs.ext4
+IMG_ROOTFS_FILES = $(IMAGE_DIR)/uImage $(SW_BUILD_DIR)/platform/filesystem/rootfs.ext4
+PREBUILT_ROOTFS_FILES = $(PREBUILT_LINUX_PATH)/uImage $(PREBUILT_LINUX_PATH)/rootfs.ext4
+PREBUILT_SYSROOT = $(PREBUILT_LINUX_PATH)/sdk.sh
 
-.PHONY: all sw_comp dtb bootimage clean
+.PHONY: all sw_comp dtb bootimage rootfs sysroot clean mrproper
+
+all: check-prebuilt $(SW_FILES) $(BOOT_IMAGE) $(IMG_ROOTFS_FILES)
 
 $(XSA):
 	$(MAKE) -C $(TOP_DIR) xsa
@@ -17,17 +21,15 @@ dtb: $(DTB_FILE)
 $(DTB_FILE): $(XSA)
 	$(info "Generating SW Artifacts...")
 	@if [ ! -d $(BOOT_DIR) ]; then mkdir -p $(BOOT_DIR); fi
-	mkdir -p $(SW_DIR)/tmp
+	mkdir -p $(SW_BUILD_DIR)/tmp
 	$(info "DTB generation started using XSCT")
-	$(XSCT) -eval "setws $(SW_DIR)/tmp; createdts -hw $(XSA) -git-url https://github.com/kodachi77/device-tree-xlnx -git-branch xlnx_rel_$(VIVADO_VERSION) -board $(BOARD) -platform $(PLATFORM) -zocl -out $(SW_DIR)/tmp"
-	$(eval BSP_PATH = $(SW_DIR)/tmp/$(PLATFORM)/$(CORE)/device_tree_domain/bsp/)
+	$(XSCT) -eval "setws $(SW_BUILD_DIR)/tmp; createdts -hw $(XSA) -git-url https://github.com/kodachi77/device-tree-xlnx -git-branch xlnx_rel_$(VIVADO_VERSION) -board $(BOARD) -platform $(PLATFORM) -zocl -out $(SW_BUILD_DIR)/tmp"
+	$(eval BSP_PATH = $(SW_BUILD_DIR)/tmp/$(PLATFORM)/$(CORE)/device_tree_domain/bsp/)
 	cp -rf $(SYSTEM_CONF_DTS) $(BSP_PATH)
 	cp -rf $(SYSTEM_USER_DTSI) $(BSP_PATH)
 	@if [ -f $(SYSTEM_USER_DTSI) ]; then echo "#include \"system-user.dtsi\"" >> $(BSP_PATH)/system-top.dts; fi
-	cat $(BSP_PATH)/system-top.dts
-	cd $(BSP_PATH) && \
-	cpp -Iinclude -E -P -undef -D__DTS__ -x assembler-with-cpp ./system-top.dts | $(DTC) -I dts -O dtb -o $(DTB_FILE) - && cd -
-	#rm -rf $(SW_DIR)/tmp
+	cd $(BSP_PATH) && cpp -Iinclude -E -P -undef -D__DTS__ -x assembler-with-cpp ./system-top.dts | $(DTC) -I dts -O dtb -o $(DTB_FILE) - && cd -
+	$(RM) -r $(SW_BUILD_DIR)/tmp
 
 
 sw_comp: $(SW_FILES)
@@ -38,50 +40,48 @@ $(SW_FILES): $(DTB_FILE)
 	$(foreach BOOT_FILE,$(BOOT_FILES),cp -f $(PREBUILT_LINUX_PATH)/$(BOOT_FILE) $(BOOT_DIR) ;)
 	
 	# Generate fsbl file
-	$(XSCT) -nodisp -sdx $(PLATFORM_SW_SRC)/generate_platform.tcl platform_name "${PLATFORM_NAME}" \
-		xsa_path "${XSA}" emu_xsa_path "${HW_EMU_XSA}" platform_out "${PLATFORM_DIR}" \
-		boot_dir_path "${BOOT_DIR}" img_dir_path "${IMAGE_DIR}" generate_sw true
+	$(XSCT) -nodisp -sdx $(PLATFORM_SW_SRC)/generate_platform.tcl \
+		platform_name "${PLATFORM_NAME}" \
+		xsa_path "${XSA}" \
+		emu_xsa_path "${HW_EMU_XSA}" \
+		platform_out "${PLATFORM_DIR}" \
+		boot_dir_path "${BOOT_DIR}" \
+		img_dir_path "${IMAGE_DIR}" \
+		generate_sw true
 	$(eval BOOT_ARTIFACTS = ${PLATFORM_DIR}/${PLATFORM_NAME}/export/${PLATFORM_NAME}/sw/${PLATFORM_NAME}/boot)
+	# we want to fail if there are no boot artifacts
 	cp -rf ${BOOT_ARTIFACTS}/*.elf ${BOOT_DIR} 
-	# 2>/dev/null || :
-	#${RM} -r ${PLATFORM_DIR}
-
-
-
-all: check-prebuilt $(SW_FILES)
-
-#image_rootfs: $(IMG_ROOTFS_FILES)
-#bitfile: $(BIT_FILE)
-
-clean:
-	${RM} -r $(SW_DIR)
-
-#platform: $(XSA) $(SW_FILES)
-#	$(XSCT) -nodisp -sdx $(PLATFORM_SW_SRC)/generate_platform.tcl platform_name "${PLATFORM_NAME}" \
-#		xsa_path "${XSA}" emu_xsa_path "${HW_EMU_XSA}" platform_out "${PLATFORM_DIR}" \
-#		boot_dir_path "${BOOT_DIR}" img_dir_path "${IMAGE_DIR}" generate_sw false
-#	@if [ -d $(SW_DIR)/platform/filesystem ]; then cp -rf ${SW_DIR}/platform/filesystem $(PLATFORM_DIR)/${PLATFORM_NAME}/export/${PLATFORM_NAME}/sw/${PLATFORM_NAME}/xrt/; fi
-#	@echo 'Platform build complete'
 
 $(BIT_FILE): $(XSA)
-	mkdir -p $(SW_DIR)
-	cp -f $(XSA) $(SW_DIR)/system.xsa
-	cp -f $(BIT_FILE) $(SW_DIR)/hw.bit
-	#@echo "openhw $(SW_DIR)/system.xsa" > $(SW_DIR)/extract
-	#@echo "set bitstream_file [get_property BITSTREAM_FILE [current_hw_design]]" >> $(SW_DIR)/extract
-	#@echo "file copy -force $$bitstream_file \"$(BIT_FILE)\"" >> $(SW_DIR)/extract
-	#$(XSCT) $(SW_DIR)/extract
+	mkdir -p $(SW_BUILD_DIR)
+	cp -f $(XSA) $(SW_BUILD_DIR)/system.xsa
+	# do not fail if file doesn't exist
+	cp -f $(BIT_FILE) $(SW_BUILD_DIR)/hw.bit 2> /dev/null || :
 
 bootimage: $(BOOT_IMAGE)
 
 $(BOOT_IMAGE): $(BIT_FILE) $(SW_FILES)
 	$(info "BOOT image for platforms")
-	$(BOOTGEN) -arch $(PLATFORM_TYPE) -image $(CWD)/bootgen.bif -o $(BOOT_IMAGE) -w;
+ifeq ($(PRE_SYNTH),TRUE)	
+	$(BOOTGEN) -arch $(PLATFORM_TYPE) -image $(CWD)/bootgen-pre-synth.bif -o $(BOOT_IMAGE) -w
+else
+	$(BOOTGEN) -arch $(PLATFORM_TYPE) -image $(CWD)/bootgen.bif -o $(BOOT_IMAGE) -w
+endif	
 
-#$(IMG_ROOTFS_FILES): $(SYSTEM_XSA) $(PETA_FILES)
-#	cp -f $(PREBUILT_LINUX_PATH)/uImage $(IMAGE_DIR)/uImage
-#	mkdir -p $(SW_DIR)/platform/filesystem
-#	cp -f $(PREBUILT_LINUX_PATH)/rootfs.ext4 $(SW_DIR)/platform/filesystem/rootfs.ext4
+rootfs: $(IMG_ROOTFS_FILES)
 
-mrproper:
-	@echo Running mrproper
+$(IMG_ROOTFS_FILES): $(PREBUILT_ROOTFS_FILES)
+	mkdir -p $(IMAGE_DIR)
+	cp -f $(PREBUILT_LINUX_PATH)/uImage $(IMAGE_DIR)/uImage
+	mkdir -p $(SW_BUILD_DIR)/platform/filesystem
+	cp -f $(PREBUILT_LINUX_PATH)/rootfs.ext4 $(SW_BUILD_DIR)/platform/filesystem/rootfs.ext4
+
+sysroot:
+	mkdir -p $(SYSROOT)
+	$(PREBUILT_SYSROOT) -y -d $(SYSROOT)
+
+clean:
+	${RM} -r $(SW_BUILD_DIR)
+
+mrproper: clean
+	$(info "Running mrproper")

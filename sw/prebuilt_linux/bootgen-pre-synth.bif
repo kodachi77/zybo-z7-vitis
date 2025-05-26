@@ -1,0 +1,6 @@
+the_ROM_image:
+{
+	[bootloader] ../../sw/build/platform/boot/fsbl.elf
+	../../sw/build/platform/boot/u-boot.elf
+	[load=0x00100000] ../../sw/build/platform/boot/system.dtb
+}

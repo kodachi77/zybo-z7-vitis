@@ -13,6 +13,20 @@ ifndef PETALINUX
 $(error ERROR: 'PETALINUX' variable not set, Please install PetaLinux or use pre-built software images to build the platform. Please refer to build instructions in readme for more details.)
 endif
 
+# versioning
+VERSION          ?= 2022_1
+VER              ?= $(VERSION)
+
+PRE_SYNTH        ?= TRUE
+PETALINUX_BUILD  ?= FALSE
+
+# common
+TOP_DIR          ?= $(shell readlink -f .)
+ifneq ("$(wildcard $(TOP_DIR))","")
+  TOP_DIR_ABS ?= $(realpath $(TOP_DIR))
+  override TOP_DIR := $(realpath $(TOP_DIR_ABS))
+endif
+
 # tools
 VIVADO  = $(XILINX_VIVADO)/bin/vivado
 DTC     = $(XILINX_VITIS)/bin/dtc
@@ -33,19 +47,9 @@ CPU_ARCH 		  = a9
 BOARD    		  = zynq-zybo-z7
 CORE     		  = ps7_cortexa9_0
 
-# versioning
-VERSION          ?= 2022_1
-VER              ?= $(VERSION)
-
-PRE_SYNTH        ?= TRUE
-PETALINUX_BUILD  ?= FALSE
-
-# common
-TOP_DIR          ?= $(shell readlink -f .)
-
 # hw related
 XSA_DIR           = $(TOP_DIR)/hw/hw_handoff
-SW_DIR            = $(TOP_DIR)/sw/build
+SW_BUILD_DIR      = $(TOP_DIR)/sw/build
 
 PROJECT_NAME      = hw
 
@@ -54,11 +58,9 @@ HW_EMU_XSA        = $(XSA_DIR)/hw_emu/$(PROJECT_NAME).xsa
 BIT_FILE          = $(XSA_DIR)/$(PROJECT_NAME).bit
 README_FILE       = $(XSA_DIR)/README.txt
 
-
-
 # sw related
-BOOT_DIR          = $(SW_DIR)/platform/boot
-IMAGE_DIR         = $(SW_DIR)/platform/image
+BOOT_DIR          = $(SW_BUILD_DIR)/platform/boot
+IMAGE_DIR         = $(SW_BUILD_DIR)/platform/image
 
 DTB_FILE          = $(BOOT_DIR)/system.dtb
 BOOT_IMAGE        = $(BOOT_DIR)/BOOT.BIN
@@ -75,20 +77,8 @@ PLATFORM_DIR      = $(TOP_DIR)/platform_repo
 # flow related
 
 PREBUILT_LINUX_PATH ?= /opt/xilinx/platform/xilinx-$(PLATFORM_TYPE)-common-$(VIVADO_VERSION)
-
 ifneq ($(wildcard $(TOP_DIR)/xilinx-$(PLATFORM_TYPE)-common-$(VIVADO_VERSION)),)
 PREBUILT_LINUX_PATH ?= $(TOP_DIR)/xilinx-$(PLATFORM_TYPE)-common-$(VIVADO_VERSION)
-endif
-
-# Getting Absolute paths
-ifneq ("$(wildcard $(XSA))","")
-  XSA_ABS ?= $(realpath $(XSA))
-  override XSA := $(realpath $(XSA_ABS))
-endif
-
-ifneq ("$(wildcard $(HW_EMU_XSA_ABS))","")
-  HW_EMU_XSA_ABS ?= $(realpath $(HW_EMU_XSA))
-  override HW_EMU_XSA := $(realpath $(HW_EMU_XSA_ABS))
 endif
 
 ifneq ("$(wildcard $(PREBUILT_LINUX_PATH_ABS))","")
